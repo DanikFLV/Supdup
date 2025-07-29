@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Machine Timeline View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script defer src="timeline.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+  .grid-cols-25 {
+    display: grid;
+    grid-template-columns: repeat(25, minmax(24px, 1fr));
+  }
+  
+</style>
+</head>
+<body class="bg-gray-100 p-4 text-gray-800">
+  <h1 class="text-2xl font-bold mb-4">Machine Timeline View</h1>
+
+  <div class="flex flex-wrap gap-4 items-center mb-4">
+    
+    <label>
+      Select Date:
+      <input type="date" id="logDate" class="border p-1 rounded" />
+    </label>
+
+    <label>
+      Shift:
+      <select id="shiftFilter" class="border p-1 rounded">
+        <option value="all">All Shifts</option>
+        <option value="1">1st Shift (6:00–18:00)</option>
+        <option value="2">2nd Shift (18:00–6:00)</option>
+      </select>
+    </label>
+
+    <button id="loadBtn" class="bg-blue-500 text-white px-4 py-1 rounded">Load Timeline</button>
+    <button id="exportBtn" class="bg-green-600 text-white px-4 py-1 rounded">Export CSV</button>
+    <button id="exportImageBtn" class="bg-blue-600 text-white px-4 py-1 rounded ml-2">
+      📸 Export PNG
+    </button>
+    <button id="exportPdfBtn" class="bg-red-600 text-white px-4 py-1 rounded ml-2">
+      📄 Export PDF
+    </button>
+  </div>
+
+  <div id="timelineWrapper" class="overflow-x-auto">
+    <div id="timelineContainer" class="space-y-1 border rounded-lg bg-white p-2"></div>
+  </div>
+  </body>
+</html>

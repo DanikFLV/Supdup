@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Supervisor Machine Log</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="app.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="p-4 bg-gray-100 text-gray-800">
+  <h1 class="text-xl font-bold mb-4">Supervisor Machine Log</h1>
+
+  <!-- Time and Save Section -->
+  <div class="bg-white p-4 rounded-lg border mb-4">
+    <h2 class="text-lg font-semibold mb-3">Log Entry</h2>
+    <div class="flex flex-wrap gap-4 items-end">
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Supervisor Name:</span>
+        <input type="text" id="supervisorName" class="mt-1 block border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500" required placeholder="Enter supervisor name">
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Shift Type:</span>
+        <select id="shiftType" class="mt-1 block border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500" required>
+          <option value="">Select Shift</option>
+          <option value="Green Day">Green Day (6:00 AM - 6:00 PM)</option>
+          <option value="Green Night">Green Night (6:00 PM - 6:00 AM)</option>
+          <option value="Blue Day">Blue Day (6:00 AM - 6:00 PM)</option>
+          <option value="Blue Night">Blue Night (6:00 PM - 6:00 AM)</option>
+        </select>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Time:</span>
+        <input type="time" id="logTime" class="mt-1 block border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500" required>
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Date:</span>
+        <input type="date" id="logDate" class="mt-1 block border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500" required>
+      </label>
+      <button id="saveLogs" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded font-medium transition-colors">Save Logs</button>
+      <button id="clearSession" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-medium transition-colors text-sm">New Supervisor</button>
+    </div>
+  </div>
+
+  <div id="machineGrid" class="overflow-x-auto">
+    <table class="table-auto w-full border-collapse border">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border px-2 py-1">Machine #</th>
+          <th class="border px-2 py-1">Status</th>
+          <th class="border px-2 py-1">Problem Code</th>
+        </tr>
+      </thead>
+      <tbody id="machineRows">
+        <!-- Populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
