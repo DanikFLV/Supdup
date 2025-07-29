@@ -66,7 +66,7 @@ document.getElementById("clearSession").onclick = () => {
     alert("Session cleared. Please enter new supervisor information.");
   }
 };
-const problemCodes = ["NWO", "XWO", "TSS", "STD", "BND", "TNS", "BST", "EDG", "WIV", "BKS", "TNT", "CLR", "ELE", "ZEM", "MFR", "BUR", "CAM", "CFL", "CRB", "EIT", "MTE", "MTF", "STP", "TIM", "MTR", "PSB", "HED", "SHOP", "SPG", ];
+const problemCodes = ["NRM", "NWO", "XWO", "TSS", "STD", "BND", "TNS", "BST", "EDG", "WIV", "BKS", "TNT", "CLR", "ELE", "ZEM", "MFR", "BUR", "CAM", "CFL", "CRB", "EIT", "MTE", "MTF", "STP", "TIM", "MTR", "PSB", "HED", "SHOP", "SPG", ];
 
 
 
