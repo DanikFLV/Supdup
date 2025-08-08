@@ -21,6 +21,7 @@ const loadBtn = document.getElementById("loadBtn");
 
 let lastTimelineData = null;
 let lastUsedShift = null;
+let supervisorData = null; // Store supervisor information
 // Auto-fill today's date
 const today = new Date().toISOString().split("T")[0];
 dateInput.value = today;
@@ -73,12 +74,22 @@ function loadLogs(date, shift) {
       console.log(`Processing ${snapshot.size} documents for date filtering`);
       const data = {};
       let processedCount = 0;
+      supervisorData = null; // Reset supervisor data
 
       snapshot.forEach(doc => {
         const log = doc.data();
         console.log("Processing log:", log);
         
-        const { machine, status, problem, timestamp } = log;
+        const { machine, status, problem, timestamp, supervisorName, shiftType, productionProficiency } = log;
+        
+        // Extract supervisor information from first valid log
+        if (!supervisorData && supervisorName && timestamp.split(" ")[0] === date) {
+          supervisorData = {
+            supervisorName,
+            shiftType,
+            productionProficiency
+          };
+        }
         
         // Validate required fields
         if (!machine || !status || !timestamp) {
@@ -142,6 +153,17 @@ function loadLogs(date, shift) {
       // ✅ Store for export
       lastTimelineData = data;
 
+      // Display supervisor information
+      if (supervisorData && supervisorData.supervisorName) {
+        displaySupervisorInfo(supervisorData);
+      } else {
+        // Hide supervisor info if no supervisor data found
+        const supervisorInfoDiv = document.getElementById("supervisorInfo");
+        if (supervisorInfoDiv) {
+          supervisorInfoDiv.classList.add("hidden");
+        }
+      }
+
       if (Object.keys(data).length === 0) {
         container.innerHTML = `<div class="text-center text-gray-500 py-8">No data found for ${date}. Make sure you have saved some logs first.</div>`;
       } else {
@@ -152,6 +174,43 @@ function loadLogs(date, shift) {
       console.error("Error loading timeline data:", err);
       container.innerHTML = `<div class="text-center text-red-500 py-8">Failed to load data: ${err.message}</div>`;
     });
+}
+
+function displaySupervisorInfo(data) {
+  const supervisorInfoDiv = document.getElementById("supervisorInfo");
+  const supervisorNameSpan = document.getElementById("displaySupervisorName");
+  const shiftTypeSpan = document.getElementById("displayShiftType");
+  const productionProficiencySpan = document.getElementById("displayProductionProficiency");
+  
+  // Check if all required elements exist
+  if (!supervisorInfoDiv || !supervisorNameSpan || !shiftTypeSpan || !productionProficiencySpan) {
+    console.warn("Supervisor info elements not found in DOM");
+    return;
+  }
+  
+  if (data && data.supervisorName) {
+    supervisorNameSpan.textContent = data.supervisorName;
+    shiftTypeSpan.textContent = data.shiftType || "N/A";
+    
+    if (data.productionProficiency !== null && data.productionProficiency !== undefined && data.productionProficiency !== "") {
+      productionProficiencySpan.textContent = `${data.productionProficiency}%`;
+      // Add color coding based on proficiency level
+      if (data.productionProficiency >= 90) {
+        productionProficiencySpan.className = "ml-2 text-green-600 font-bold text-lg";
+      } else if (data.productionProficiency >= 75) {
+        productionProficiencySpan.className = "ml-2 text-yellow-600 font-bold text-lg";
+      } else {
+        productionProficiencySpan.className = "ml-2 text-red-600 font-bold text-lg";
+      }
+    } else {
+      productionProficiencySpan.textContent = "N/A";
+      productionProficiencySpan.className = "ml-2 text-gray-500 font-bold text-lg";
+    }
+    
+    supervisorInfoDiv.classList.remove("hidden");
+  } else {
+    supervisorInfoDiv.classList.add("hidden");
+  }
 }
 
 function renderTimeline(machineLogs, shift) {
@@ -360,6 +419,17 @@ document.getElementById("exportBtn").onclick = () => {
   const csvRows = [];
   const currentShift = lastUsedShift || shiftFilter.value; // Use the shift that was used to load the data
   const timeBlocks = [];
+  
+  // Add supervisor information header if available
+  if (supervisorData && supervisorData.supervisorName) {
+    csvRows.push([`Supervisor: ${supervisorData.supervisorName}`]);
+    csvRows.push([`Shift Type: ${supervisorData.shiftType || 'N/A'}`]);
+    if (supervisorData.productionProficiency !== null && supervisorData.productionProficiency !== undefined) {
+      csvRows.push([`Production Proficiency: ${supervisorData.productionProficiency}%`]);
+    }
+    csvRows.push([`Date: ${dateInput.value}`]);
+    csvRows.push([]); // Empty row for spacing
+  }
   
   // Generate same time blocks as used in rendering
   if (currentShift === "1") {

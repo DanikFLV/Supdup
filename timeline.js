@@ -542,7 +542,10 @@ for (let i = 1; i <= 74; i++) {
       bar.classList.add("bg-green-500");
     } else if (statusInfo.status === "Stopped") {
       bar.classList.add("bg-red-500");
-      textSpan.textContent = statusInfo.problem || 'Stopped';
+      // Extract only the first 3 letters (abbreviation) for display
+      const problemText = statusInfo.problem || 'Stopped';
+      const abbreviation = problemText.split(' ')[0].substring(0, 3).toUpperCase();
+      textSpan.textContent = abbreviation;
     } else {
       bar.classList.add("bg-gray-200"); // A neutral, visible "No Data" color
     }
@@ -553,7 +556,7 @@ for (let i = 1; i <= 74; i++) {
     tooltip.className = "absolute bottom-full mb-1 left-1/2 -translate-x-1/2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none z-10 w-max max-w-xs";
     
     let tooltipText = `${blockTime} - ${statusInfo.status}`;
-    if (statusInfo.problem) tooltipText += ` (${statusInfo.problem})`;
+    if (statusInfo.problem) tooltipText += ` (${statusInfo.problem})`; // Full text in tooltip
     if (statusInfo.supervisorName) tooltipText += `\nSupervisor: ${statusInfo.supervisorName}`;
     if (statusInfo.shiftType) tooltipText += `\nShift: ${statusInfo.shiftType}`;
     if (!statusInfo.hasDirectLog && statusInfo.status !== "No Data") {

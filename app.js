@@ -14,12 +14,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Auto-fill current date and time
+// Auto-fill current date and time - always show today's date
 const now = new Date();
 const logDate = document.getElementById("logDate");
 const logTime = document.getElementById("logTime");
 const supervisorName = document.getElementById("supervisorName");
 
+// Always show today's date (no automatic date changing)
 logDate.value = now.toISOString().split("T")[0]; // format: YYYY-MM-DD
 
 // Format time like HH:MM
@@ -66,7 +67,13 @@ document.getElementById("clearSession").onclick = () => {
     alert("Session cleared. Please enter new supervisor information.");
   }
 };
-const problemCodes = ["NRM", "NWO", "XWO", "TSS", "STD", "BND", "TNS", "BST", "EDG", "WIV", "BKS", "TNT", "CLR", "ELE", "ZEM", "MFR", "BUR", "CAM", "CFL", "CRB", "EIT", "MTE", "MTF", "STP", "TIM", "MTR", "PSB", "HED", "SHOP", "SPG", ];
+const problemCodes = ["NRM (New Raw Material)", "NWO (New Work Order)", "XWO (No Work Order)", "TSS (Thickness)", 
+                      "STD (Strand Width)", "BND (Bond)", "TNS (Thickness and Strand)", "BST (Bond/Strand/Thickness)", 
+                      "EDG (Edges)", "WIV (Width Change)", "OSC (Oscilation)", "BKS (Breaking Strand)", "TNT (Thick and Thin)",
+                      "CLR (Clearance)", "ELE (Electrical Issue)", "ZEM (Zero Max)", "MFR (Main Flattener Rolls Grinding)", 
+                      "BUR (Replace Backup Rolls)", "CAM (Cam Change/Turn)", "CFB (Cam Follower Bearing)", "CRB (Connecting Rob Bearing)", 
+                      "EIT (Set Index Timing)", "MTE (Motor Issue Expander)", "MTF (Motor Issue Flattener)", "STP (Adjust Stripper Plate)", 
+                      "TIM (Set Feed Timing)", "PSB (Pin/Sleeve/Ball Cages)", "HED (Head)", "SHOP (Shop)", "SPG (Adjust Index Spring)",];
 
 
 
